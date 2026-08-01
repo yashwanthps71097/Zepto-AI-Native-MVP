@@ -1,6 +1,6 @@
 // ContextPulse App JS - Simulator Console (Cart & Checkout Flow)
 
-const API_BASE = "";
+const API_BASE = "https://zepto-ai-native-mvp.onrender.com";
 
 const EMOJI_MAP = {
   "Fruits & Vegetables": "🥦",
