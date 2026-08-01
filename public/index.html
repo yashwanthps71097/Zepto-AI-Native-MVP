@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zepto ContextPulse: AI Picks Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Toast Popup Container -->
+  <div id="toast-message" class="toast-popup">
+    <span>Added! You're exploring a new category.</span>
+  </div>
+
+  <!-- Simulated profile fields kept hidden to prevent JS breakages -->
+  <select id="user-selector" style="display: none;">
+    <option value="1" selected>User 1</option>
+  </select>
+  <select id="weather-selector" style="display: none;">
+    <option value="rainy" selected>Rainy</option>
+  </select>
+
+  <div class="workspace-centered-pure">
+    
+    <!-- Phone Frame Mockup -->
+    <div class="phone-frame">
+      
+      <!-- ========================================== -->
+      <!-- PAGE 1: HIGH-FIDELITY ZEPTO HOME / SHOP    -->
+      <!-- ========================================== -->
+      <div id="phone-cart-screen" class="phone-screen active">
+        <!-- Home Header -->
+        <div class="phone-home-header">
+          <div class="eta-profile-row">
+            <span class="home-eta">⚡ 6 minutes</span>
+            <span class="home-profile-icon">👤</span>
+          </div>
+          <div class="home-loc-selector">
+            <span class="home-loc-text">Other - Bus stop, 2M5W+C2J, Old Mad...</span>
+            <span class="chevron">∨</span>
+          </div>
+        </div>
+
+        <!-- Top Store Scroll tabs -->
+        <div class="home-store-tabs">
+          <span class="store-tab active" data-store="zepto">zepto</span>
+          <span class="store-tab" data-store="monsoon">MONSOON STORE</span>
+          <span class="store-tab" data-store="mall">Super Mall</span>
+          <span class="store-tab" data-store="fresh">Fresh</span>
+        </div>
+
+        <div class="phone-content home-mode">
+          <!-- Search Bar -->
+          <div class="home-search-bar">
+            <span class="search-icon" style="cursor: pointer;" id="home-search-btn">🔍</span>
+            <input id="home-search-input" type="text" placeholder="Search for 'Milk' or 'Banana'..." />
+          </div>
+
+          <!-- Categories row -->
+          <div class="home-categories-scroll" id="home-categories-pills">
+            <!-- Dynamically populated pills -->
+          </div>
+
+
+
+          <!-- Shop by Category Section -->
+          <div class="home-shop-by-category">
+            <h3>Shop by Category</h3>
+            <div class="category-grid" id="homepage-category-grid">
+              <!-- Dynamically populated categories -->
+            </div>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="home-products-section">
+            <h3 id="store-section-title">FRESH @ ₹1 <span class="subtitle">Handpicked daily essentials</span></h3>
+            <div id="home-product-list">
+              <!-- Dynamically populated items -->
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- Bottom Tab Navigation -->
+        <div class="home-bottom-tabs">
+          <div id="tab-home-bar" class="tab-item active">
+            <span class="tab-icon pink-z">Z</span>
+            <span class="tab-label">Home</span>
+          </div>
+          <div id="tab-categories-bar" class="tab-item">
+            <span class="tab-icon">🗂️</span>
+            <span class="tab-label">Categories</span>
+          </div>
+          <div id="tab-trending-bar" class="tab-item">
+            <span class="tab-icon">📈</span>
+            <span class="tab-label">Trending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- PAGE 2: HIGH-FIDELITY ZEPTO CHECKOUT       -->
+      <!-- ========================================== -->
+      <div id="phone-checkout-screen" class="phone-screen">
+        <!-- Status Bar -->
+        <div class="phone-status-bar">
+          <span class="time">11:26</span>
+          <span class="battery">VoLTE 📶 77%</span>
+        </div>
+
+        <!-- Location Header -->
+        <div class="phone-location">
+          <button id="checkout-back-btn" class="back-arrow">‹</button>
+          <div class="address-details">
+            <span class="loc-tag">Other <span class="chevron">∨</span></span>
+            <span class="loc-text">Bus stop, Old Madras Rd, Krishnarajapuram...</span>
+          </div>
+          <button class="wishlist-btn">♡</button>
+        </div>
+
+        <!-- Savings Green Banner -->
+        <div class="savings-strip">
+          <span>Yay! You saved ₹13 on this order ∨</span>
+        </div>
+
+        <div class="phone-content">
+
+
+          <!-- Cart Items Summary Card -->
+          <div class="phone-card">
+            <div class="card-header">
+              <span class="eta-icon">🕒</span>
+              <div class="eta-details">
+                <h3>Delivering in 6 mins</h3>
+                <p id="checkout-item-count-label">1 item</p>
+              </div>
+            </div>
+            
+            <div id="checkout-cart-list">
+              <!-- Default item shown here -->
+              <div class="cart-item">
+                <span class="item-emoji">🥛</span>
+                <div class="item-info">
+                  <h4>Godrej Jersey Full Cream Milk</h4>
+                  <p>1 pack (490 ml or 500 ml) · <span class="item-price">₹35 <span class="old-price">₹38</span></span></p>
+                </div>
+                <div class="qty-btn">1 Pack</div>
+              </div>
+            </div>
+            
+            <div class="forgot-something-row">
+              <span>Forgot something? <span class="add-more-txt">Add More Items</span></span>
+            </div>
+          </div>
+
+          <!-- =================================================== -->
+          <!-- ✨ ZEPTO CONTEXTPULSE AI Picks for You Module      -->
+          <!-- =================================================== -->
+          <div id="ai-picks-section" class="ai-section">
+            <div class="ai-section-header">
+              <h3>✨ AI Picks for You</h3>
+              <p class="subtitle">"Discover products from categories you haven't explored yet."</p>
+              <span id="detected-intent-badge" class="intent-badge">INTENT: BREAKFAST ROUTINE</span>
+            </div>
+
+            <!-- 1. Discovery Recommendation Card -->
+            <div id="ai-discovery-card" class="ai-card">
+              <div class="ai-card-meta">
+                <span class="new-category-tag">🆕 NEW CATEGORY</span>
+                <span id="ai-card-category-name" class="cat-name">Beverages</span>
+              </div>
+              
+              <div class="ai-reason-bubble">
+                <p id="ai-reason-text">"Matches your shopping routine"</p>
+              </div>
+
+              <div class="ai-product-row">
+                <span id="ai-product-emoji" class="product-emoji">🥤</span>
+                <div class="product-details">
+                  <h4 id="ai-product-name">Paper Boat Coconut Water</h4>
+                  <p><span id="ai-product-meta">200 ml · ₹60</span> <span class="old-price">₹75</span></p>
+                </div>
+                <button id="add-discovery-item" class="btn-add">+ ADD</button>
+              </div>
+            </div>
+
+            <!-- 2. Micro-Trial Card -->
+            <div id="ai-trial-card" class="ai-card trial-mode">
+              <div class="ai-card-meta">
+                <span class="trial-tag">⚡ TRY SOMETHING NEW</span>
+                <span id="ai-trial-category-name" class="cat-name">Personal Care</span>
+              </div>
+              <div class="ai-product-row">
+                <span id="ai-trial-emoji" class="product-emoji">🧴</span>
+                <div class="product-details">
+                  <h4 id="ai-trial-name">Nivea Soft Mini Cream</h4>
+                  <p><span id="ai-trial-meta">50ml · ₹79</span></p>
+                </div>
+                <button id="add-trial-item" class="btn-trial-add">Try for ₹79</button>
+              </div>
+            </div>
+
+            <!-- 3. Bundle Card -->
+            <div id="ai-bundle-card" class="ai-card bundle-mode">
+              <div class="ai-card-meta">
+                <span class="bundle-tag">📦 LIFESTYLE BUNDLE</span>
+              </div>
+              <h4 id="ai-bundle-name">Healthy Morning Bundle</h4>
+              <p class="bundle-desc">Complete your routine with this curated set</p>
+              <div class="bundle-price-row">
+                <div class="bundle-pricing">
+                  <span id="ai-bundle-price" class="price">₹249</span>
+                  <span id="ai-bundle-savings" class="savings">Save ₹45</span>
+                </div>
+                <button id="add-bundle-item" class="btn-bundle-add">Add Bundle</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bill Summary -->
+          <div class="phone-card bill-card">
+            <h3>📋 Bill Summary</h3>
+            <div class="bill-row">
+              <span>Item Total</span>
+              <span>₹35</span>
+            </div>
+            <div class="bill-row">
+              <span>Delivery Fee</span>
+              <span>₹30</span>
+            </div>
+            <div class="bill-row total">
+              <span>To Pay</span>
+              <span id="total-bill-pay">₹65</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pay bottom bar -->
+        <div class="phone-bottom-bar" style="flex-direction: column; padding: 12px 14px; gap: 8px; height: auto;">
+          <button id="checkout-btn" class="pay-action-btn pink" style="width: 100%; height: 44px; font-size: 14px; font-weight: 800; background-color: var(--primary) !important; color: white !important; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);">
+            Place Order
+          </button>
+          <span style="font-size: 10px; color: var(--text-muted); font-weight: 500; text-align: center; width: 100%; display: block;">
+            By placing order you agree to our <span style="text-decoration: underline; cursor: pointer;">T&C</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- PAGE 3: INTERACTIVE KPI DASHBOARD OVERLAY  -->
+      <!-- ========================================== -->
+      <!-- ========================================== -->
+      <!-- PAGE 3: HIGH-FIDELITY ZEPTO TRENDING       -->
+      <!-- ========================================== -->
+      <div id="phone-trending-screen" class="phone-screen">
+        <!-- Trending Header -->
+        <div class="phone-home-header" style="background: #ff3269; color: white; padding: 10px 14px;">
+          <div class="eta-profile-row" style="margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+            <span class="home-eta" style="color: white; font-weight: 800; font-size: 14px;">⚡ Trending Products</span>
+            <span class="home-profile-icon" style="background: rgba(255,255,255,0.2); color: white; border-radius: 50%; padding: 4px; font-size: 12px; cursor: pointer;">👤</span>
+          </div>
+          <div class="home-loc-selector" style="color: #ffe4e6; font-size: 9px;">
+            <span>Popular & Top Purchased Items Near You</span>
+          </div>
+        </div>
+
+        <div class="phone-content home-mode" style="background: #f8fafc; padding: 12px; height: calc(100% - 90px); overflow-y: auto;">
+          <div id="trending-products-list" style="display: flex; flex-direction: column; gap: 8px; padding-bottom: 40px;">
+            <!-- Dynamically populated trending products -->
+          </div>
+        </div>
+
+        <!-- Bottom Tab Navigation -->
+        <div class="home-bottom-tabs">
+          <div id="tab-home-trending" class="tab-item">
+            <span class="tab-icon">Z</span>
+            <span class="tab-label">Home</span>
+          </div>
+          <div id="tab-categories-trending" class="tab-item">
+            <span class="tab-icon">🗂️</span>
+            <span class="tab-label">Categories</span>
+          </div>
+          <div id="tab-trending-active" class="tab-item active">
+            <span class="tab-icon">📈</span>
+            <span class="tab-label">Trending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- NEW: HIGH-FIDELITY ZEPTO CATEGORIES SCREEN -->
+      <!-- ========================================== -->
+      <div id="phone-categories-screen" class="phone-screen">
+        <!-- Categories Header -->
+        <div class="phone-home-header" style="background: #fff; border-bottom: 1px solid #e2e8f0; color: #0f172a; padding: 10px 14px;">
+          <div class="eta-profile-row" style="margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <span class="home-eta" style="color: #ff3269; font-weight: 800; font-size: 14px;">⚡ Categories</span>
+            <span class="home-profile-icon" style="background: #f1f5f9; color: #0f172a; border-radius: 50%; padding: 4px; font-size: 12px; cursor: pointer;">👤</span>
+          </div>
+          <div class="home-search-bar" style="margin: 0; background: #f1f5f9; border-radius: 8px; padding: 6px 10px; display: flex; align-items: center;">
+            <span class="search-icon" style="font-size: 12px; margin-right: 6px;">🔍</span>
+            <input id="categories-search-input" type="text" placeholder="Search categories & products..." style="background: transparent; border: none; outline: none; font-size: 11px; width: 100%;" />
+          </div>
+        </div>
+
+        <div class="categories-container-split" style="display: flex; flex: 1; overflow: hidden; background: #f8fafc;">
+          <!-- Left Sidebar -->
+          <div id="categories-sidebar" class="categories-sidebar" style="width: 85px; background: #f1f5f9; overflow-y: auto; display: flex; flex-direction: column; border-right: 1px solid #e2e8f0;">
+            <!-- Dynamically populated main categories -->
+          </div>
+          <!-- Right Content Pane -->
+          <div class="categories-right-pane" style="flex: 1; overflow-y: auto; padding: 10px; background: #ffffff;">
+            <h3 id="selected-category-title" class="selected-category-title" style="font-size: 12px; font-weight: 800; margin-bottom: 10px; color: #1e293b;">Fruits & Vegetables</h3>
+            <div id="category-products-list" class="category-products-grid" style="display: flex; flex-direction: column; gap: 8px;">
+              <!-- Dynamically populated products under selected category -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Tab Navigation -->
+        <div class="home-bottom-tabs">
+          <div id="tab-home-categories" class="tab-item">
+            <span class="tab-icon">Z</span>
+            <span class="tab-label">Home</span>
+          </div>
+          <div id="tab-categories-active" class="tab-item active">
+            <span class="tab-icon">🗂️</span>
+            <span class="tab-label">Categories</span>
+          </div>
+          <div id="tab-trending-categories" class="tab-item">
+            <span class="tab-icon">📈</span>
+            <span class="tab-label">Trending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Bottom Floating Bar -->
+      <div class="home-floating-cart-bar" style="display: none;">
+        <div class="floating-left">
+          <div class="scooter-circle">🛵</div>
+          <div class="unlock-desc">
+            <span class="unlock-title">Unlock free delivery</span>
+            <span class="unlock-subtitle">Shop for ₹14 more</span>
+          </div>
+        </div>
+        <button id="proceed-to-checkout-btn" class="floating-cart-pill">
+          <div class="mini-item-box">🥛</div>
+          <div class="cart-pill-text">
+            <span class="pill-title">Cart</span>
+            <span class="pill-subtitle" id="cart-item-count-label">0 items</span>
+          </div>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const script = document.createElement('script');
+    script.src = 'app.js?v=' + Date.now();
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
