@@ -969,6 +969,9 @@ document.getElementById("checkout-btn").addEventListener("click", () => {
   cartItems = [];
   addedItems = [];
   updateCartSummary();
+  renderProducts();
+  renderTrendingProducts();
+  if (typeof renderCategoryProducts === "function") renderCategoryProducts();
   navigateToScreen("phone-cart-screen");
 });
 
