@@ -6,14 +6,18 @@ This document details the system architecture for **ContextPulse**, the AI-power
 
 ## 🗺️ System Overview
 
-The system is split into three main layers:
+The system is split into four main layers:
 1. **Data & Feature Layer:** Computes user purchase histories, active category exclusions, and contextual/weather signals.
 2. **AI & Prediction Layer (ContextPulse Engine):**
    * **Intent Parser:** Maps cart contents to higher-level lifestyle profiles (e.g. *Fitness*, *Breakfast*, *Pet Parent*).
    * **Category Filter:** Matches detected intents with adjacent categories the user rarely or never purchases, prioritizing new category exploration.
    * **Micro-Trial Selector:** Filters catalog listings for trial packs and mini-sizes priced strictly under ₹99.
-3. **API & Serving Layer:** Serves structured recommendations, handles CORS middleware headers for Vercel/Railway cross-origin hosting, and captures A/B metrics.
-4. **Clean Checkout View:** Focuses exclusively on **Cart Items Summary** and **AI Picks** (with details like Delivering to, Delivery Slot, and Payment cards removed to reduce visual cognitive overload).
+3. **API & Serving Layer:** Serves structured recommendations, implements 5-minute memory TTL caching, handles CORS middleware headers for Vercel/Railway cross-origin hosting, and captures real-time A/B telemetry metrics.
+4. **Interactive Checkout & Simulator View:** 
+   * **Clean Checkout View:** Focuses exclusively on **Cart Items Summary** and **AI Picks** (with details like Delivering to, Delivery Slot, and Payment cards removed to reduce visual cognitive overload).
+   * **Multi-Store Simulator:** Supports switching between different stores (Zepto, Monsoon, Super Mall, Fresh) to change category context dynamically.
+   * **Dedicated Categories Tab:** Allows manual navigation and exploration of products within discovery categories.
+   * **State Reset Guardrail:** Fully resets cart state, product catalogs, and category lists upon checkout completion.
 
 ```mermaid
 graph TD
@@ -35,12 +39,14 @@ graph TD
     %% Serving & API
     subgraph Serving Layer
         StockFilter --> ServingAPI[ContextPulse API]
+        ServingAPI --> CacheManager[5-min Cache Manager]
         ServingAPI --> Telemetry[Telemetry tracker]
     end
 
     %% Client App
-    subgraph Checkout Integration
+    subgraph Checkout Integration & Simulator
         ServingAPI --> |✨ AI Picks for You| CheckoutScreen[Zepto Checkout Page]
+        CheckoutScreen --> |Multi-Store Tabs / Categories View| SimulatorFrame[High-Fidelity Simulator]
     end
 
     %% Feedback loop
@@ -70,8 +76,13 @@ graph TD
   1. Primary Discovery Recommendation (with AI reason badge).
   2. Micro-Sample Tryout (with price and `"Try for ₹XX"` metadata).
   3. Complementary Bundle option (with total savings and bundle price).
+* **Cache Controller:** Stores recommendations payload in an in-memory cache keyed by user ID, temperature, weather, and cart hash with a **5-minute TTL** to bypass expensive LLM calls during rapid checkout edits.
 * **CORS Access Middleware:** Express header controller allows cross-origin requests from Vercel-hosted frontend instances to the Railway API server.
-* **Telemetry Tracker:** Logs checkout completion, CTR, and conversion metrics.
+* **Telemetry Tracker:** Logs checkout completion, CTR, and conversion metrics via `POST /api/telemetry/event` and `GET /api/telemetry/metrics`.
+
+### 4. Simulator UI & State Reset Handler
+* **Dual-State Add-To-Cart Buttons:** The `+ ADD` or `Try for ₹XX` CTAs turn into purple `✓ ADDED` state when clicked, modifying the client-side cart array instantly and triggering telemetry tracking.
+* **UI State Reset:** After completing checkout, the client-side cart is emptied, and the DOM triggers `renderProducts()`, `renderTrendingProducts()`, and `renderCategoryProducts()` to clean the screen and prevent stale, cached quantities from appearing on the store homepage.
 
 ---
 
@@ -87,15 +98,21 @@ sequenceDiagram
     participant DB as Telemetry DB
 
     User->>API: Load Checkout (Cart: [Protein, Oats])
-    API->>Engine: Resolve Intent & Exclusions
-    Note over Engine: Intent: Fitness; Exclude: Regularly purchased groceries
-    Engine->>Engine: Generate recommendations (Micro-sample, Bundle)
-    Engine-->>API: Recommendations (1. Shaker, 2. Hydration Drink < ₹99)
-    API->>Inv: Validate stock at local hub
-    Inv-->>API: Stock Validated (All in stock)
-    API-->>User: Render "✨ AI Picks for You"
+    Note over API: Check memory cache first
+    alt Cache Hit
+        API-->>User: Render "✨ AI Picks for You" (from Cache)
+    else Cache Miss
+        API->>Engine: Resolve Intent & Exclusions
+        Note over Engine: Intent: Fitness; Exclude: Regularly purchased groceries
+        Engine->>Engine: Generate recommendations (Micro-sample, Bundle)
+        Engine-->>API: Recommendations (1. Shaker, 2. Hydration Drink < ₹99)
+        API->>Inv: Validate stock at local hub
+        Inv-->>API: Stock Validated (All in stock)
+        API-->>User: Render "✨ AI Picks for You"
+    end
     User->>API: Click "+ ADD" on Gym Shaker
-    API-->>User: Update Subtotal & Total Instantly (Toast message)
-    User->>User: Complete Order
+    API-->>User: Update Subtotal & Total Instantly (Toast message & Telemetry event)
+    User->>User: Complete Order & Click Checkout
+    Note over User: Local cart array is emptied; homepage products state is reset.
     User->>DB: Log checkout_completed, new_category_conversion, revenue=₹199
 ```

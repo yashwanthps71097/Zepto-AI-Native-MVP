@@ -21,17 +21,21 @@ The system features an original **Emerald Green & Teal Glassmorphism visual them
 4. **Reduce friction** with a "Try Something New" strategy that offers micro-trial products priced under ₹99 (mini-sizes, sample packs) with a clear `"Try for ₹XX"` CTA.
 5. **Update cart summaries instantly** with interactive, one-tap checkout add-on actions, including dual-state toggle buttons.
 6. **Minimize clutter:** Focuses the layout exclusively on the Cart Summary and the ContextPulse AI Picks, removing redundant address and slot cards to expedite checkout completion.
+7. **Simulate Live Contexts:** Offers a high-fidelity interactive multi-store simulator (switching between Zepto Fresh, Monsoon Store, Super Mall, and Fresh Farm) and a dedicated Categories tab to test intent extraction under various scenarios.
+
+### 🌐 Live Deployments
+* **Interactive Frontend Simulator:** [https://zepto-ai-native-mvp.vercel.app](https://zepto-ai-native-mvp.vercel.app)
+* **AI Recommendation Backend:** [https://zepto-ai-native-mvp.onrender.com](https://zepto-ai-native-mvp.onrender.com) (Deployed on Render, integrated with Groq Llama-3.1)
 
 ---
 
-## 📊 Success Metrics
+## 📊 Success Metrics & Live Telemetry
 
-### Primary KPI
-* **New Category Adoption Rate:** Percentage of Monthly Active Customers (MAC) purchasing from at least one new category every month.
+To track business impact, the simulator incorporates a real-time **Telemetry Dashboard** measuring the following live KPIs:
+* **Impressions & Clicks:** Total views and clicks on AI-recommended products.
+* **Click-Through Rate (CTR):** Percentage of users engaging with recommendations.
+* **Add-To-Cart (ATC) Rate:** Percentage of recommendations added to the checkout cart.
+* **Incremental Revenue (AOV Uplift):** Sum of additional purchases generated exclusively from the AI recommendation cards.
+* **New Category Adoption / Conversion Rate:** The percentage of orders where the user completes checkout with at least one newly recommended category item.
+* **State Reset Guardrail:** Verifies that completion of checkout resets the simulator cart and homepage lists, allowing clean, repeatable user trials.
 
-### Supporting Metrics
-* **Cross-category conversion rate:** Conversion metrics on discovery widgets.
-* **Recommendation CTR & Add-to-Cart rates:** Engagement indicators.
-* **Average Order Value (AOV) uplift:** Value contribution.
-* **Repeat purchase rate in newly discovered categories:** Retention inside new categories.
-* **Checkout completion rate:** Ensuring recommendations do not interrupt or delay order completion.
